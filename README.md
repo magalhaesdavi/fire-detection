@@ -4,11 +4,11 @@ The proposed algorithm consists of an intersection between a color classifier an
 
 ## Color classifier
 
-Color classifier mask: 
+<!-- Color classifier mask:  -->
 ![mask](images/mask.jpg "mask")
 <!-- <img src="images/mask.jpg"/> -->
 
-Output:
+<!-- Output: -->
 ![output](images/output.jpg "output")
 <!-- <img src="images/output.jpg"/> -->
 
