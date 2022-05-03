@@ -198,12 +198,14 @@ class Transformer(nn.Module):
 
 
 class CoAtNet(nn.Module):
-    def __init__(self, image_size, in_channels, num_blocks, channels, num_classes=1000,
+    def __init__(self, image_size, in_channels, num_blocks, channels, l1, l2, one_fc, num_classes=1000,
                  block_types=['C', 'C', 'T', 'T']):
         super().__init__()
         ih, iw = image_size
         block = {'C': MBConv, 'T': Transformer}
 
+        self.one_fc = one_fc
+        
         self.s0 = self._make_layer(
             conv_3x3_bn, in_channels, channels[0], num_blocks[0], (ih // 2, iw // 2))
         self.s1 = self._make_layer(
@@ -216,8 +218,14 @@ class CoAtNet(nn.Module):
             block[block_types[3]], channels[3], channels[4], num_blocks[4], (ih // 32, iw // 32))
 
         self.pool = nn.AvgPool2d(ih // 32, 1)
-        self.fc = nn.Linear(channels[-1], num_classes, bias=False)
+
+        if self.one_fc:
+            self.fc = nn.Linear(channels[-1], num_classes, bias=False)
         # self.fc2 = nn.Linear(num_classes, 2, bias=False)
+        else:
+            self.fc1 = nn.Linear(channels[-1], l1, bias=False)
+            self.fc2 = nn.Linear(l1, l2, bias=False)
+            self.fc3 = nn.Linear(l2, num_classes, bias=False)
 
     def forward(self, x):
         x = self.s0(x)
@@ -227,8 +235,13 @@ class CoAtNet(nn.Module):
         x = self.s4(x)
 
         x = self.pool(x).view(-1, x.shape[1])
-        x = self.fc(x)
+        if self.one_fc:
+            x = self.fc(x)
         # x = self.fc2(x)
+        else:
+            x = self.fc1(x)
+            x = self.fc2(x)
+            x = self.fc3(x)
         return x
 
     def _make_layer(self, block, inp, oup, depth, image_size):
@@ -265,10 +278,16 @@ def coatnet_3():
     return CoAtNet((224, 224), 3, num_blocks, channels, num_classes=2)
 
 
-def coatnet_4():
+# def coatnet_4():
+#     num_blocks = [2, 2, 12, 28, 2]  # L
+#     channels = [192, 192, 384, 768, 1536]  # D
+#     return CoAtNet((224, 224), 3, num_blocks, channels, num_classes=2)
+
+def coatnet_4(one_fc, l1=16, l2=8):
     num_blocks = [2, 2, 12, 28, 2]  # L
     channels = [192, 192, 384, 768, 1536]  # D
-    return CoAtNet((224, 224), 3, num_blocks, channels, num_classes=2)
+    return CoAtNet(image_size=(224, 224), in_channels=3, num_blocks=num_blocks, channels=channels,
+                   num_classes=2, l1=l1, l2=l2, one_fc=one_fc)
 
 
 def count_parameters(model):

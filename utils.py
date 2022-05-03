@@ -3,7 +3,9 @@ import torch.nn.functional as F
 import numpy as np
 import matplotlib.pyplot as plt
 # from torch.utils.tensorboard import SummaryWriter
-import  matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
 # from tqdm import tqdm
 
 # # Device configuration
@@ -42,6 +44,19 @@ import  matplotlib.pyplot as plt
 #
 # dataloaders = {'train': train_loader, 'val': val_loader}
 # dataset_sizes = {'train': len(train_set), 'val': len(val_set)}
+
+
+def plot_confusion_matrix(m, classes_names, image_name):
+    df_cm = pd.DataFrame(m, index=[i for i in classes_names],
+                         columns=[i for i in classes_names])
+    plt.figure(figsize=(10, 7))
+    heatmap = sns.heatmap(df_cm, annot=True, cmap="Blues")
+    plt.ylabel("Ground truth")
+    plt.xlabel("Prediction")
+    plt.title("Normalized confusion matrix")
+    fig = heatmap.get_figure()
+    # fig.savefig('images/coatnet_4_and_v0_cm.png')
+    fig.savefig(image_name)
 
 
 def matplotlib_imshow(img, one_channel=False):

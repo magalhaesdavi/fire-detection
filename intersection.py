@@ -65,31 +65,35 @@ import os
 # # print(label)
 # # print(label.shape)
 
+def main():
+    input_path = 'output/color_classifier/v0/'
+    input_path2 = 'output/model/coatnet_4_72/'
 
-input_path = 'output/color_classifier/v0/'
-input_path2 = 'output/model/coatnet_4/'
-
-if os.path.isdir(input_path):
-    lst_img = [os.path.join(input_path, file)
-               for file in os.listdir(input_path)]
-else:
-    if os.path.isfile(input_path):
-        lst_img = [input_path]
+    if os.path.isdir(input_path):
+        lst_img = [os.path.join(input_path, file)
+                   for file in os.listdir(input_path)]
     else:
-        raise Exception("Invalid path")
+        if os.path.isfile(input_path):
+            lst_img = [input_path]
+        else:
+            raise Exception("Invalid path")
 
-for im in lst_img:
-    print('\t|____Image processing: ', im)
-    img1 = cv2.imread(im)
-    # print(img1.shape)
-    # cv2.imshow('image', img1)
-    # cv2.waitKey(0)
-    img2_path = input_path2 + im[im.rfind("/") + 1:]
-    # print(img2_path)
-    img2 = cv2.imread(img2_path)
-    # cv2.imshow('image', img2)
-    # cv2.waitKey(0)
-    # print(img2.shape)
-    dest_and = cv2.bitwise_and(img2, img1, mask=None)
-    output_path = 'output/intersection/coatnet_4_and_v0/' + im[im.rfind("/") + 1:]
-    cv2.imwrite(output_path, dest_and)
+    for im in lst_img:
+        print('\t|____Image processing: ', im)
+        img1 = cv2.imread(im)
+        # print(img1.shape)
+        # cv2.imshow('image', img1)
+        # cv2.waitKey(0)
+        img2_path = input_path2 + im[im.rfind("/") + 1:]
+        # print(img2_path)
+        img2 = cv2.imread(img2_path)
+        # cv2.imshow('image', img2)
+        # cv2.waitKey(0)
+        # print(img2.shape)
+        dest_and = cv2.bitwise_and(img2, img1, mask=None)
+        output_path = 'output/intersection/coatnet_4_72_and_v0/' + im[im.rfind("/") + 1:]
+        cv2.imwrite(output_path, dest_and)
+
+
+if __name__ == "__main__":
+    main()

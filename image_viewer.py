@@ -17,11 +17,11 @@ transform = transforms.Compose([
         transforms.Normalize((0.6558, 0.4875, 0.2858), (0.3469, 0.3010, 0.2526))
         ])
 
-data_path = '../dataset/'
+data_path = 'datasets/'
 
-train_set = torchvision.datasets.ImageFolder(root='../split_dataset/train', transform=transform)
-val_set = torchvision.datasets.ImageFolder(root='../split_dataset/val', transform=transform)
-test_set = torchvision.datasets.ImageFolder(root='../split_dataset/test', transform=transform)
+train_set = torchvision.datasets.ImageFolder(root='datasets/smallframe_dataset/train', transform=transform)
+# val_set = torchvision.datasets.ImageFolder(root='datasets/smallframe_dataset/val', transform=transform)
+# test_set = torchvision.datasets.ImageFolder(root='../split_dataset/test', transform=transform)
 
 train_loader = torch.utils.data.DataLoader(dataset=train_set,
                                            batch_size=4,
