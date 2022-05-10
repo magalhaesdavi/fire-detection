@@ -23,7 +23,8 @@ def plot_confusion_matrix(m, classes_names, image_name):
 def main():
     classes_names = ["fire", "non-fire"]
     preds_path = 'output/model/preclass/'
-    # preds_path = 'output/intersection/coatnet472_preclass0.7_and_v0/'
+    # preds_path = 'output/refined/coatnet472_preclass0.7_and_v0/'
+    # preds_path = 'output/model/v2t0.9/'
     gt_path = 'datasets/test/gt/'
     image_name = 'images/coatnet_4_72_and_v0_cm.png'
 

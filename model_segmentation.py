@@ -119,7 +119,7 @@ def main(device):
 
     ff_model = coatnet.coatnet_4(one_fc=True)
     # ff_model.load_state_dict(torch.load('weights/ffcoatnet472.ckpt'))
-    ff_model.load_state_dict(torch.load('weights/ffcoatnet_4.ckpt'))
+    ff_model.load_state_dict(torch.load('weights/ffcoatnetv2.ckpt'))
     ff_model = ff_model.to(device)
     ff_model.eval()
 
@@ -179,16 +179,17 @@ def main(device):
         # print(prediction)
         # print(prob.item())
 
+        # 0.8 and 0.7
         flag = False
-        if prediction == 1 and prob < 0.98:
+        if prediction == 0 and prob < 0.8:
+            prediction = 1
+            flag = True
+        if prediction == 1 and prob < 0.7 and not flag:
             prediction = 0
-
-        #     flag = True
-        # if prediction == 0 and _ < 0.6 and not flag:
-        #     prediction = 1
 
         # if prediction == 0 or (prediction == 1 and _ < 0.98):
         if prediction == 0:
+            # img = Image.new('RGB', (image.shape[1], image.shape[0]), color='white')
             d = ImageDraw.Draw(img)
             for x in range(0, image.shape[1], step_size):
                 for y in range(0, image.shape[0], step_size):
@@ -202,9 +203,9 @@ def main(device):
                     output = softmax(output)
                     _, prediction = torch.max(output.data, 1)
 
-                    if prediction == 1 and _ < 0.7:
-                        prediction = 0
-
+                    # if prediction == 1 and _ < 0.7:
+                    #     prediction = 0
+                    #
                     if prediction == 0:
                         d.rectangle(((x, y), (x + w_width - 1, y + w_height - 1)), fill=(255, 255, 255))
 
