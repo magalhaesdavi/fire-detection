@@ -4,7 +4,7 @@ import numpy as np
 import cv2
 import os
 
-directory = os.fsencode('../dataset/fire/')
+directory = os.fsencode('datasets/smallframe_images/fire/')
 
 mean_hue_max = 0
 mean_hue_min = 0
@@ -17,7 +17,7 @@ for file in os.listdir(directory):
         # print(os.path.join(directory, filename))
         continue
     else:
-        img = cv2.imread('../dataset/fire/' + filename)
+        img = cv2.imread('datasets/smallframe_images/fire/' + filename)
         hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         hueMax = hsv_img[:, :, 0].max()
         hueMin = hsv_img[:, :, 0].min()
@@ -68,7 +68,8 @@ upperBound = np.array([hueMax, 255, 255], np.uint8)
 # output_img = cv2.bitwise_and(test, test, mask=mask)
 # cv2.imwrite("../output.png", output_img)
 
-input_path = 'D:/Documentos/fire_detection/BoWFireDataset/BoWFireDataset/dataset/img'
+# input_path = 'D:/Documentos/fire_detection/BoWFireDataset/BoWFireDataset/dataset/img'
+input_path = 'datasets/smallframe_dataset/'
 
 if os.path.isdir(input_path):
     lst_img = [os.path.join(input_path, file)

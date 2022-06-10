@@ -119,17 +119,18 @@ def main(device):
 
     ff_model = coatnet.coatnet_4(one_fc=True)
     # ff_model.load_state_dict(torch.load('weights/ffcoatnet472.ckpt'))
-    ff_model.load_state_dict(torch.load('weights/ffcoatnetv2.ckpt'))
+    ff_model.load_state_dict(torch.load('weights/ffcoatnet_4.ckpt'))
     ff_model = ff_model.to(device)
     ff_model.eval()
 
-    model = coatnet.coatnet_4(one_fc=True)
-    model.load_state_dict(torch.load('weights/coatnet_4.ckpt'))
+    # model = coatnet.coatnet_4(one_fc=True)
+    model = coatnet.coatnet_0()
+    model.load_state_dict(torch.load('weights/coatnet.ckpt'))
     # model.load_state_dict(torch.load('weights/spcoatnet1.ckpt'))
     model = model.to(device)
     model.eval()
 
-    (w_width, w_height) = (50, 50)
+    (w_width, w_height) = (75, 75)
     step_size = 25
 
     input_path = 'datasets/test/img/'
@@ -180,11 +181,8 @@ def main(device):
         # print(prob.item())
 
         # 0.8 and 0.7
-        flag = False
-        if prediction == 0 and prob < 0.8:
-            prediction = 1
-            flag = True
-        if prediction == 1 and prob < 0.7 and not flag:
+        # flag = False
+        if prediction == 1 and prob < 0.98:
             prediction = 0
 
         # if prediction == 0 or (prediction == 1 and _ < 0.98):
